@@ -1,0 +1,157 @@
+﻿
+@{
+    ViewData["Title"] = "Form";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<head>
+    <title>Formulario</title>
+
+    <script type="text/javascript">
+
+        /*
+        function ValidarNOVacio(idInput,idLbl){
+            var text = $('#' + idInput).val();
+
+            if(text == ""){
+                $('#' + idLbl).text("Este campo no puede ir vacío.");
+                $('#' + idLbl).css({ "color": "red" });
+                $('#' + idInput).css({ "borderColor": "red", "background-color": "#f8d7da" });
+
+            }
+            else{
+                $('#' + idLbl).text("");
+                $('#' + idInput).css({ "border-color": "green", "background-color": "#82E0AA" })
+            }
+        }
+        */
+
+        function ValidarForm(){
+
+            var bandera = true;
+
+            var $list = $("#frmDatos :input[type='text']");
+
+           $list.each(function(i, item){
+               if(item.value == ''){
+                    bandera = false;
+                    $('#' + item.id).css({ "borderColor": "red", "background-color": "#f8d7da" });
+                    $('#' + i).text("Este campo no puede ir vacío");
+                    $('#' + i).css({ "color": "red" });
+               }
+               else{
+                    if (!/^\S+$/g.test(item.value)) {
+                        $('#' + item.id).css({ "borderColor": "red", "background-color": "#f8d7da" });
+                        $('#' + i).text("No se permiten espacios en blanco.");
+                        $('#' + i).css({ "color": "red" });
+                        bandera = false;
+                   }
+                   else{
+                        if (i == 2) {
+                            if (!/^[0-9]*$/g.test(item.value)) {
+                                $('#' + i).text("Solo se admiten numeros entre 10 y 90.");
+                                $('#' + item.id).css({ "borderColor": "red", "background-color": "#f8d7da" });
+                                $('#' + i).css({ "color": "red" });
+                               bandera = false;
+                            }
+                            else {
+                                if (parseInt(item.value) < 10 || parseInt(item.value) > 90) {
+                                    $('#' + i).text("Solo se admite una edad entre 10 y 90.");
+                                    $('#' + item.id).css({ "borderColor": "red", "background-color": "#f8d7da" });
+                                    $('#' + i).css({ "color": "red" });
+                                    bandera = false;
+                                }
+                                else {
+                                    $('#' + item.id).css({ "border-color": "green", "background-color": "#82E0AA" });
+                                    $('#' + i).text("");
+                                }
+                            }
+
+                        }
+                        else {
+                            $('#' + item.id).css({ "border-color": "green", "background-color": "#82E0AA" });
+                            $('#' + i).text("");
+                        }
+                   }                                      
+               }
+           });
+
+            if(bandera){
+                $('#Validar').addClass('visually-hidden');
+                $('#Enviar').removeClass('visually-hidden');
+                $("#frmDatos :input[type='text']").prop('readonly',true);
+                $('#lblEnviar').removeClass('visually-hidden');
+            }
+            
+        }
+
+    </script>
+</head>
+
+<body>
+    @using (Html.BeginForm("Form", "Personas", FormMethod.Post, new { enctype = "multipart/form-data", @id = "frmDatos" }))
+    {
+        <table>
+            <tr>
+                <td>Nombre</td>
+                <td>
+                    <input name="Nombre" id="txtNombre" type="text" value="" />
+                    <label id="0"></label>
+                </td>
+
+            </tr>
+
+            <tr>
+                <td>Direccion</td>
+                <td>
+                    <input name="Direccion" id="txtDireccion" type="text" value="" />
+                    <label id="1"></label>
+                </td>
+            </tr>
+
+            <tr>
+                <td>Edad</td>
+                <td>
+                    <input name="Edad" id="txtEdad" type="text" value="" />
+                    <label id="2"></label>
+                </td>
+            </tr>
+
+            <tr>
+                <td>Correo</td>
+                <td>
+                    <input name="Correo" id="txtCorreo" type="text" value="" />
+                    <label id="3"></label>
+                </td>
+            </tr>
+
+            <tr>
+                <td>Habilidad principal</td>
+                <td>
+                    <input name="HPrincipal" id="txtHPrincipal" type="text" value="" />
+                    <label id="4"></label>
+                </td>
+            </tr>
+
+            <tr>
+                <td>Habilidad secundaria</td>
+                <td>
+                    <input name="HSecundaria" id="txtHSecundaria" type="text" value="" />
+                    <label id="5"></label>
+                </td>
+            </tr>
+
+            <tr id="Validar">
+                <td><input type="button" value="Validar" id="btnValidar" onclick="ValidarForm()" /></td>
+            </tr>
+
+            <tr class="visually-hidden" id="Enviar">                
+                <td><input type="submit" value="Submit" id="btnSubmit" /></td>
+            </tr>
+
+        </table>
+
+        <label class="visually-hidden" id="lblEnviar">Los datos correctos, presione el botón para enviar la información.</label>
+    }
+
+</body>
